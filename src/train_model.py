@@ -18,10 +18,6 @@ original_dataset = pd.read_csv(dataset_location)
 features = original_dataset.values[:, 1:31]
 labels = original_dataset.values[:, 31]
 
-print(features)
-print(features.shape)
-print(labels)
-
 # split dataset into training and validation sets
 # test_size = percentage used for validation
 # random state = random seed for shuffling
@@ -39,6 +35,7 @@ model = mlp.fit(features_train, labels_train)
 # validate that our model is accurate enough
 model_accuracy = mlp.score(features_test, labels_test)
 
+# just for us
 print(model_accuracy)
 
 # serialise the trained model so we can use it in our service

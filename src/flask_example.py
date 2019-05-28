@@ -2,9 +2,7 @@
 import flask as fl
 # to deserialise the pre-trained model
 import pickle as pkl
-import json
-import pandas as pd
-import pandas.io.json as pdjson
+# to format the input data in a way that the model understands
 import numpy as np
 
 app = fl.Flask(__name__)
@@ -22,9 +20,13 @@ with open(model_location, 'rb') as handle:
 # note that we don't need sklearn anymore, it's all contained in the pickle
 @app.route('/predict-cancer', methods=['POST'])
 def predict_cancer():
+    # read in the JSON request
     data = fl.request.get_json()
+    # convert it to a 2d array so that predict() understands it
     features = [np.array(data['features'])]
+    # do the actual prediction
     prediction = model.predict(features)
+    # get the result
     result = prediction[0]
     return fl.jsonify(result)
 
