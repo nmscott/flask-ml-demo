@@ -15,8 +15,12 @@ dataset_location = '../data/wdbc.csv'
 original_dataset = pd.read_csv(dataset_location)
 
 # split dataset into features and class labels
-features = original_dataset.values[:, 1:30]
+features = original_dataset.values[:, 1:31]
 labels = original_dataset.values[:, 31]
+
+print(features)
+print(features.shape)
+print(labels)
 
 # split dataset into training and validation sets
 # test_size = percentage used for validation
@@ -25,7 +29,6 @@ features_train, features_test, labels_train, labels_test = ms.train_test_split(f
                                                                                labels,
                                                                                test_size=0.3,
                                                                                random_state=123)
-
 
 # establish the model
 mlp = nn.MLPClassifier(activation='tanh', solver='lbfgs', max_iter=200, momentum=0.9)
