@@ -4,8 +4,12 @@ import pandas as pd
 # we have to import these modules explicitly as sklearn does not import its own submodules
 import sklearn.model_selection as ms
 import sklearn.neural_network as nn
+import sklearn.svm as svm
+import sklearn.metrics as metrics
 # to serialise the model when it's trained
 import pickle as pkl
+
+import matplotlib
 
 # location of the serialised model to save to
 model_location = '../models/mlp.pkl'
@@ -27,17 +31,22 @@ features_train, features_test, labels_train, labels_test = ms.train_test_split(f
                                                                                random_state=123)
 
 # establish the model
-mlp = nn.MLPClassifier(activation='tanh', solver='lbfgs', max_iter=200, momentum=0.9)
+# untrained_model = nn.MLPClassifier(activation='tanh', solver='lbfgs', max_iter=400, momentum=0.9)
+# untrained_model = svm.LinearSVC()
+untrained_model = svm.SVC(kernel='rbf', gamma='scale')
 
 # train the model
-model = mlp.fit(features_train, labels_train)
+trained_model = untrained_model.fit(features_train, labels_train)
 
 # validate that our model is accurate enough
-model_accuracy = mlp.score(features_test, labels_test)
+model_accuracy = trained_model.score(features_test, labels_test)
+predicted_labels = trained_model.predict(features_test)
+model_confusion = metrics.confusion_matrix(labels_test, predicted_labels)
 
 # just for us
 print(model_accuracy)
+print(model_confusion)
 
 # serialise the trained model so we can use it in our service
 with open(model_location, 'wb') as handle:
-    pkl.dump(model, handle)
+    pkl.dump(trained_model, handle)
